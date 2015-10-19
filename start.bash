@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#
-# start.bash
-#
-
 NGINX="/etc/nginx"
 OVERRIDE="/data"
 
