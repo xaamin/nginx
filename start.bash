@@ -9,6 +9,7 @@ OVERRIDE="/data"
 
 CONFIG="nginx.conf"
 SITES="sites"
+SSL="ssl"
 LOGS="logs"
 WWW="www"
 AVAILABLE="sites-available"
@@ -21,6 +22,12 @@ if [[ -d "$OVERRIDE/$SITES" ]]; then
 
   rm -fr "$ENABLED"
   ln -s "$OVERRIDE/$SITES" "$ENABLED"
+fi
+
+# Create SSL directory and SSL certificate for securing Nginx
+if [[ ! -d "$OVERRIDE/$SSL" ]]; then
+	mkdir -p "$OVERRIDE/$SSL"
+	/usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$OVERRIDE/$SSL/nginx.key" -out "$OVERRIDE/$SSL/nginx.crt"
 fi
 
 # Create logs directory

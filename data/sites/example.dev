@@ -2,10 +2,16 @@ server {
     client_max_body_size 20M;
     listen 80;
 
+    listen 443 ssl;
+
     root /data/www/example.dev/public;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
+
+    ssl_certificate /data/ssl/nginx.crt;
+    ssl_certificate_key /data/ssl/nginx.key;
+
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
