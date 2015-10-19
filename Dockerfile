@@ -15,6 +15,9 @@ RUN add-apt-repository -y ppa:nginx/stable \
 # Add bootstrap file
 ADD start.bash /start.bash
 
+# Add script to secure Nginx Installation with new SSL certificate
+ADD secure.bash /secure.bash
+
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
