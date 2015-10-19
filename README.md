@@ -2,7 +2,7 @@
 Docker container to run [NGINX](http://nginx.org/)
 
 ### Base docker image
-* [xaamin/php](https://registry.hub.docker.com/r/xaamin/ubuntu)
+* [xaamin/ubuntu](https://registry.hub.docker.com/r/xaamin/ubuntu)
 
 ### Installation
 * Install [Docker](https://www.docker.com)
