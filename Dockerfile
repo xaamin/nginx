@@ -1,4 +1,4 @@
-FROM xaamin/ubuntu:14.04
+FROM xaamin/ubuntu
 
 MAINTAINER "Benjamín Martínez Mateos" <bmxamin@gmail.com>
 
