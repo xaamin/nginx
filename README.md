@@ -20,7 +20,7 @@ First of all run the following command in terminal.
 	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $(pdw)/data/ssl/nginx.key -out $(pdw)/data/ssl/nginx.crt
 ```
 
-See **data** directory inside this repository for sample structure. You must link to [xaamin/php-fpm](xaamin/php-fpm) docker container named as **php-fpm.box**.
+See **data** directory inside this repository for sample structure. You must link to [xaamin/php-fpm](xaamin/php-fpm) docker container named as **php-fpm**.
 ```	
-	docker run --rm -it --link php-fpm.box:php-fpm.box xaamin/nginx
+	docker run --rm -it --link php-fpm.box:php-fpm xaamin/nginx
 ```
