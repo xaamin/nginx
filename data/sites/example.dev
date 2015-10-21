@@ -1,8 +1,8 @@
 server {
     client_max_body_size 20M;
-    listen 80;
+    listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
-    listen 443 ssl;
+    listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
     root /data/www/example.dev/public;
     index index.php index.html index.htm;
