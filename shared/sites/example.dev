@@ -4,14 +4,14 @@ server {
 
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /data/www/example.dev/public;
+    root /data/www;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
 
+    ssl on;
     ssl_certificate /data/ssl/nginx.crt;
     ssl_certificate_key /data/ssl/nginx.key;
-
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;

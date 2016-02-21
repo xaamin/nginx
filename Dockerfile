@@ -13,16 +13,16 @@ RUN add-apt-repository -y ppa:nginx/stable \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
-ADD start.bash /start.bash
+ADD start.sh /start.sh
 
 # Add script to secure Nginx Installation with new SSL certificate
-ADD secure.bash /secure.bash
+ADD secure.sh /secure.sh
 
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
 # Define mountable directories
-VOLUME ["/data"]
+VOLUME ["/shared"]
 
 # Define working directory
 WORKDIR /etc/nginx
@@ -31,4 +31,4 @@ WORKDIR /etc/nginx
 EXPOSE 80 443
 
 # Define default command.
-CMD ["/bin/bash", "/start.bash"]
+CMD ["/bin/bash", "/start.sh"]

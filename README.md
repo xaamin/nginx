@@ -12,16 +12,16 @@ Docker container to run [NGINX](http://nginx.org/)
 * Build an image from Dockerfile `docker build -t xaamin/nginx https://github.com/xaamin/nginx.git`
 
 ### Volumes
-You must provide a volume mounted on **/data** containing the same structure as data directory
+You must provide a volume mounted on **/shared** containing the same structure as shared directory
 
 ### Usage
-See **data** directory inside this repository for sample structure. You must link to [xaamin/php-fpm](xaamin/php-fpm) docker container named as **php-fpm**.
+See **shared** directory inside this repository for sample structure. You must link to [xaamin/php-fpm](xaamin/php-fpm) docker container named as **php-fpm**.
 ```	
-	docker run --rm -it --link php-fpm.box:php-fpm xaamin/nginx
+	docker run -d --name nginx.server --restart always --link php-fpm:php-fpm xaamin/nginx
 ```
 
-To replace the default SSL certificate use the following on Linux's terminal.
+To replace the default SSL certificate use the following command.
 ```
-	sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $(pdw)/data/ssl/nginx.key -out $(pdw)/data/ssl/nginx.crt
+	docker exec -it nginx.dev bash /secure.bash
 ```
 Or inside the container execute `/secure.bash` script and fill properly information.
