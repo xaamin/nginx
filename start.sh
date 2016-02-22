@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NGINX="/etc/nginx"
-OVERRIDE="/data"
+OVERRIDE="/shared"
 
 CONFIG="nginx.conf"
 SITES="sites"

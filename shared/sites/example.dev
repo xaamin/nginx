@@ -2,16 +2,43 @@ server {
     client_max_body_size 20M;
     listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
+    root /shared/www/example.dev;
+    index index.php index.html index.htm;
+
+    server_name example.dev www.example.dev;
+
+    location / {
+        try_files $uri $uri/ /index.html /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi.conf;
+        fastcgi_pass phpfpm_backend;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include fastcgi_params;
+        fastcgi_param APP_ENV production; # Environment variable for Laravel
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}   
+
+server {
+    client_max_body_size 20M;
+
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /data/www;
+    root /shared/www/example.dev;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
 
     ssl on;
-    ssl_certificate /data/ssl/nginx.crt;
-    ssl_certificate_key /data/ssl/nginx.key;
+    ssl_certificate /shared/ssl/default/nginx.crt;
+    ssl_certificate_key /shared/ssl/default/nginx.key;
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
