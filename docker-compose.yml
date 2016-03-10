@@ -1,0 +1,58 @@
+# Shared data volume container
+data.container:
+    image: xaamin/shared-volume
+    container_name: data.container
+    volumes:
+    - ./shared:/shared
+
+# Account MySQL container
+example.dev.mysql:
+  image: mysql
+  container_name: example.dev.mysql
+  hostname: example.dev.mysql
+  restart: always  
+  environment:
+    MYSQL_ROOT_PASSWORD: tHezUfru#7E=e2Ud#
+    # Uncomment if need create database and custom user on container first run
+    #MYSQL_DATABASE: DBNAME
+    #MYSQL_USER: USER
+    #MYSQL_PASSWORD: PASSWD
+  ports:
+    - "3306:3306"
+  volumes:
+    - ./shared/accounts/example.dev/mysql:/var/lib/mysql    
+    - ./shared/accounts/example.dev/config/mysql:/etc/mysql/conf.d
+
+# Account PHP5-FPM container
+example.dev.upstream:
+  image: xaamin/php-fpm
+  container_name: example.dev.upstream
+  hostname: example.dev.upstream
+  restart: always
+  environment:
+    # Domain to serve as upstream
+    ACCOUNT: example.dev
+    # Customize some resource limits. You'll see defaults
+    DATE_TIMEZONE: America/Mexico_City
+    REQUEST_TIMEOUT: 60
+    MAX_INPUT_TIME: 60
+    MEMORY_LIMIT: 128M
+    POST_MAX_SIZE: 30M
+  links:
+    - example.dev.mysql
+  volumes:
+    - ./shared/accounts/example.dev:/shared/accounts/example.dev
+
+# NGinx
+nginx.web:
+  image: xaamin/nginx
+  container_name: nginx.web
+  hostname: nginx.web
+  restart: always
+  ports:
+    - "80:80"
+    - "443:443"
+  links:
+    - example.dev.upstream
+  volumes_from:
+    - data.container
