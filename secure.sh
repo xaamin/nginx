@@ -1,25 +1,33 @@
 #!/bin/bash
 
-OVERRIDE="/data"
+OVERRIDE="/shared/ssl"
 
-SSL="ssl"
+read -p "This removes previous certificates. Do you want continue. (Y/N)? " -n 1 -r
+echo    
 
-# Create SSL directory and SSL certificate for securing Nginx
-if [[ -d "$OVERRIDE/$SSL" ]]; then
-	echo "Removing old SSL keys and dir..."
-	echo ""
-	rm -rf "$OVERRIDE/$SSL"
-fi
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-if [[ ! -d "$OVERRIDE/$SSL" ]]; then
-	echo "Creating SSL dir..."
-	echo ""
-	mkdir -p "$OVERRIDE/$SSL"
+	echo "Provide account name for generated certificates: "
+
+	read ACCOUNT
 	
-	echo "Starting create SSL keys..."
-	echo ""
-	/usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$OVERRIDE/$SSL/nginx.key" -out "$OVERRIDE/$SSL/nginx.crt"
+    # Create SSL directory and certificate for securing Nginx
+	if [[ -d "$OVERRIDE/$ACCOUNT" ]]; then
+		echo "Removing old SSL keys and dir..."
+		echo ""
+		rm -rf "$OVERRIDE/$ACCOUNT"
+	fi
 
-	echo ""
-	echo "That's all"
+	if [[ ! -d "$OVERRIDE/$ACCOUNT" ]]; then
+		echo "Creating SSL dir..."
+		echo ""
+		mkdir -p "$OVERRIDE/$ACCOUNT"
+		
+		echo "Starting create ACCOUNT keys..."
+		echo ""
+		/usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$OVERRIDE/$ACCOUNT/nginx.key" -out "$OVERRIDE/$ACCOUNT/nginx.crt"
+
+		echo ""
+		echo "That's all"
+	fi
 fi
