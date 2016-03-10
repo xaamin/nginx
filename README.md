@@ -39,5 +39,5 @@ Or inside the container execute `/secure.sh` script and fill properly informatio
 
 	# Inside de container terminal issue
 
-	SCRIPT_FILENAME=/shared/accounts/example.dev/www/index.php QUERY_STRING=VAR1 DOCUMENT_ROOT=/shared/accounts/example.dev/www REQUEST_METHOD=GET cgi-fcgi -bind -connect 127.0.0.1:9000
+	SCRIPT_FILENAME=/shared/accounts/example.dev/www/index.php QUERY_STRING=VAR1 DOCUMENT_ROOT=/shared/accounts/example.dev/www REQUEST_METHOD=GET cgi-fcgi -bind -connect example.dev.upstream:9000
 ```
