@@ -2,7 +2,7 @@ server {
     client_max_body_size 20M;
     listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/www/example.dev;
+    root /shared/accounts/example.dev/www;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
@@ -13,7 +13,7 @@ server {
 
     location ~ \.php$ {
         include fastcgi.conf;
-        fastcgi_pass phpfpm_backend;
+        fastcgi_pass example.dev.upstream:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
@@ -31,14 +31,14 @@ server {
 
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/www/example.dev;
+    root /shared/accounts/example.dev/www;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
 
     ssl on;
-    ssl_certificate /shared/ssl/default/nginx.crt;
-    ssl_certificate_key /shared/ssl/default/nginx.key;
+    ssl_certificate /shared/ssl/example.dev/nginx.crt;
+    ssl_certificate_key /shared/ssl/example.dev/nginx.key;
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
@@ -46,7 +46,7 @@ server {
 
     location ~ \.php$ {
         include fastcgi.conf;
-        fastcgi_pass phpfpm_backend;
+        fastcgi_pass example.dev.upstream:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
