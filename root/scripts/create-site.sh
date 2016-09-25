@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OVERRIDE="/shared"
+SHARED="/shared"
 
 read -p "This removes previous certificates if exist. Do you want continue. (Y/N)? " -n 1 -r
 echo    
@@ -11,30 +11,41 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 	read ACCOUNT
 
-	if [[ ! -d "$OVERRIDE/$ACCOUNT/www" ]]; then
-		echo "Creating www dir..."
+	if [[ ! -d "$SHARED/$ACCOUNT" ]]; then
+		echo "Creating account path and site config..."
 		echo ""
-		mkdir -p "$OVERRIDE/$ACCOUNT/www"
+		mkdir -p "$SHARED/$ACCOUNT"
+
+		cp -r "$SHARED/templates/www" "$SHARED/$ACCOUNT/www"
+
+		cp "$SHARED/templates/site.dev" "$SHARED/sites/$ACCOUNT"
+
+		sed -i "s|example.dev|$ACCOUNT|g" "$SHARED/sites/$ACCOUNT"
 	fi
 	
     # Delete SSL directory if dir exist
-	if [[ -d "$OVERRIDE/$ACCOUNT/ssl" ]]; then
-		echo "Removing old SSL keys and dir..."
+	if [[ -d "$SHARED/$ACCOUNT/ssl" ]]; then
+		echo "Removing old SSL path..."
 		echo ""
-		rm -rf "$OVERRIDE/$ACCOUNT/ssl"
+		rm -rf "$SHARED/$ACCOUNT/ssl"
 	fi
 
 	# Create SSL directory and certificate for securing Nginx
-	if [[ ! -d "$OVERRIDE/$ACCOUNT" ]]; then
+	if [[ ! -d "$SHARED/$ACCOUNT/ssl" ]]; then
 		echo "Creating SSL dir..."
 		echo ""
-		mkdir -p "$OVERRIDE/$ACCOUNT/ssl"
+		mkdir -p "$SHARED/$ACCOUNT/ssl"
 
 		echo "Creating $ACCOUNT certificates..."
 		echo ""
-		/usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$OVERRIDE/$ACCOUNT/ssl/nginx.key" -out "$OVERRIDE/$ACCOUNT/ssl/nginx.crt"
-
-		echo ""
-		echo "That's all"
+		/usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$SHARED/$ACCOUNT/ssl/nginx.key" -out "$SHARED/$ACCOUNT/ssl/nginx.crt"
 	fi
+
+	echo ""
+	echo "Testing configuration, restarting nginx..."
+
+	ps -aux | grep nginx | awk '{print $2}' | grep -E '[0-9]+' | xargs kill
+
+	echo ""
+	echo "That's all"
 fi
