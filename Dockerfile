@@ -1,11 +1,11 @@
-FROM xaamin/ubuntu:14.04
+FROM xaamin/ubuntu:16.04
 
-MAINTAINER "Benjamín Martínez Mateos" <bmxamin@gmail.com>
+MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
 # Install Nginx
-RUN add-apt-repository -y ppa:nginx/stable \
-	&& apt-get -y update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get -y install nginx \
+RUN apt-get -y update \
+	&& DEBIAN_FRONTEND=noninteractive apt-get -y install \
+		nginx \
 		libfcgi0ldbl \
 	
 	# Remove temp files	
