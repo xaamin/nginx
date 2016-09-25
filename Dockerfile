@@ -1,6 +1,6 @@
 FROM xaamin/ubuntu:14.04
 
-MAINTAINER "Benjamín Martínez Mateos" <bmxamin@gmail.com>
+MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
 # Install Nginx
 RUN add-apt-repository -y ppa:nginx/stable \
