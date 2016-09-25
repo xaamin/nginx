@@ -5,7 +5,8 @@ MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 # Install Nginx
 RUN add-apt-repository -y ppa:nginx/stable \
 	&& apt-get -y update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get -y install nginx \
+	&& DEBIAN_FRONTEND=noninteractive apt-get -y install \
+		nginx \
 		libfcgi0ldbl \
 	
 	# Remove temp files	
