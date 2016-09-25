@@ -6,10 +6,10 @@ data.container:
     - ./shared:/shared
 
 # Account MySQL container
-example.dev.mysql:
+mysql.database:
   image: mysql
-  container_name: example.dev.mysql
-  hostname: example.dev.mysql
+  container_name: mysql.database
+  hostname: mysql.database
   restart: always  
   environment:
     MYSQL_ROOT_PASSWORD: tHezUfru#7E=e2Ud#
@@ -20,14 +20,14 @@ example.dev.mysql:
   ports:
     - "3306:3306"
   volumes:
-    - ./shared/accounts/example.dev/mysql:/var/lib/mysql    
-    - ./shared/accounts/example.dev/config/mysql:/etc/mysql/conf.d
+    - ./shared/databases/mysql:/var/lib/mysql    
+    - ./shared/config/mysql:/etc/mysql/conf.d
 
 # Account PHP5-FPM container
-example.dev.upstream:
+example.dev:
   image: xaamin/php-fpm
-  container_name: example.dev.upstream
-  hostname: example.dev.upstream
+  container_name: example.dev
+  hostname: example.dev
   restart: always
   environment:
     # Domain to serve as upstream
@@ -39,9 +39,9 @@ example.dev.upstream:
     MEMORY_LIMIT: 128M
     POST_MAX_SIZE: 30M
   links:
-    - example.dev.mysql
+    - mysql.database
   volumes:
-    - ./shared/accounts/example.dev:/shared/accounts/example.dev
+    - ./shared/example.dev:/shared/example.dev
 
 # NGinx
 nginx.web:
@@ -53,6 +53,6 @@ nginx.web:
     - "80:80"
     - "443:443"
   links:
-    - example.dev.upstream
+    - example.dev
   volumes_from:
     - data.container

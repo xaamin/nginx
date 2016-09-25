@@ -5,9 +5,7 @@ OVERRIDE="/shared"
 
 CONFIG="nginx.conf"
 SITES="sites"
-SSL="ssl"
 LOGS="logs"
-WWW="www"
 AVAILABLE="sites-available"
 ENABLED="sites-enabled"
 

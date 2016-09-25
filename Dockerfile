@@ -1,4 +1,4 @@
-FROM xaamin/ubuntu
+FROM xaamin/ubuntu:14.04
 
 MAINTAINER "Benjamín Martínez Mateos" <bmxamin@gmail.com>
 
@@ -10,13 +10,11 @@ RUN add-apt-repository -y ppa:nginx/stable \
 	
 	# Remove temp files	
 	&& apt-get clean \
+	&& apt-get -y autoremove \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
-ADD start.sh /start.sh
-
-# Add script to secure Nginx Installation with new SSL certificate
-ADD secure.sh /secure.sh
+ADD /root/scripts /root/scripts
 
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
@@ -31,4 +29,4 @@ WORKDIR /etc/nginx
 EXPOSE 80 443
 
 # Define default command.
-CMD ["/bin/bash", "/start.sh"]
+CMD ["/bin/bash", "/root/scripts/bootstrap.sh"]

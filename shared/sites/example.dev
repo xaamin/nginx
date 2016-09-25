@@ -2,7 +2,7 @@ server {
     client_max_body_size 20M;
     listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/accounts/example.dev/www;
+    root /shared/example.dev/www;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
@@ -13,11 +13,10 @@ server {
 
     location ~ \.php$ {
         include fastcgi.conf;
-        fastcgi_pass example.dev.upstream:9000;
+        fastcgi_pass example.dev:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
-        fastcgi_param APP_ENV production; # Environment variable for Laravel
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
@@ -31,14 +30,14 @@ server {
 
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/accounts/example.dev/www;
+    root /shared/example.dev/www;
     index index.php index.html index.htm;
 
     server_name example.dev www.example.dev;
 
     ssl on;
-    ssl_certificate /shared/ssl/example.dev/nginx.crt;
-    ssl_certificate_key /shared/ssl/example.dev/nginx.key;
+    ssl_certificate /shared/example.dev/ssl/nginx.crt;
+    ssl_certificate_key /shared/example.dev/ssl/nginx.key;
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
@@ -46,11 +45,10 @@ server {
 
     location ~ \.php$ {
         include fastcgi.conf;
-        fastcgi_pass example.dev.upstream:9000;
+        fastcgi_pass example.dev:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
-        fastcgi_param APP_ENV production; # Environment variable for Laravel
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
