@@ -18,12 +18,12 @@ You must provide a volume mounted on **/shared** containing the same structure a
 
 First, run a PHP5 FPM container
 ```	
-	docker run -d --name example.dev.upstream --restart always -v ./shared/accounts/example.dev:/shared/accounts/example.dev xaamin/php-fpm
+	docker run -d --name example.dev --restart always -v ./shared/accounts/example.dev:/shared/accounts/example.dev xaamin/php-fpm
 ```
 
 See **shared** directory inside this repository for sample structure. You must link to [xaamin/php-fpm](xaamin/php-fpm) docker container.
 ```	
-	docker run -d --name nginx.web --restart always --link example.dev.upstream -v ./shared:/shared xaamin/nginx
+	docker run -d --name nginx.web --restart always --link example.dev -v ./shared:/shared xaamin/nginx
 ```
 
 To replace the default SSL certificate use the following command.
@@ -39,5 +39,5 @@ Or inside the container execute `/secure.sh` script and fill properly informatio
 
 	# Inside de container terminal issue
 
-	SCRIPT_FILENAME=/shared/accounts/example.dev/www/index.php QUERY_STRING=VAR1 DOCUMENT_ROOT=/shared/accounts/example.dev/www REQUEST_METHOD=GET cgi-fcgi -bind -connect example.dev.upstream:9000
+	SCRIPT_FILENAME=/shared/accounts/example.dev/www/index.php QUERY_STRING=VAR1 DOCUMENT_ROOT=/shared/accounts/example.dev/www REQUEST_METHOD=GET cgi-fcgi -bind -connect example.dev:9000
 ```
