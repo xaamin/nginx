@@ -14,7 +14,7 @@ RUN apt-get -y update \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
-ADD /root/scripts /root/scripts
+ADD /root/.scripts /root/.scripts
 
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
@@ -29,4 +29,4 @@ WORKDIR /etc/nginx
 EXPOSE 80 443
 
 # Define default command.
-CMD ["/bin/bash", "/root/scripts/bootstrap.sh"]
+CMD ["/bin/bash", "/root/.scripts/bootstrap.sh"]
