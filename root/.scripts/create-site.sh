@@ -16,9 +16,9 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 		echo ""
 		mkdir -p "$SHARED/$ACCOUNT"
 
-		cp -r "$SHARED/templates/www" "$SHARED/$ACCOUNT/www"
+		cp -r "$SHARED/templates/site" "$SHARED/$ACCOUNT"
 
-		cp "$SHARED/templates/site.dev" "$SHARED/sites/$ACCOUNT"
+		cp "$SHARED/templates/site.conf" "$SHARED/sites/$ACCOUNT"
 
 		sed -i "s|example.dev|$ACCOUNT|g" "$SHARED/sites/$ACCOUNT"
 	fi
