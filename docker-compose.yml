@@ -43,6 +43,7 @@ example.dev:
   volumes:
     - ./shared/example.dev:/shared/example.dev
     - ./shared/example.dev/conf/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
+    - ./shared/example.dev/conf/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
 
 # NGinx
 nginx.web:
