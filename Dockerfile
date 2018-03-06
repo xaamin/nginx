@@ -4,14 +4,14 @@ MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
 # Install Nginx
 RUN apt-get -y update \
-	&& DEBIAN_FRONTEND=noninteractive apt-get -y install \
-		nginx \
-		libfcgi0ldbl \
-	
-	# Remove temp files	
-	&& apt-get clean \
-	&& apt-get -y autoremove \
-	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install \
+        nginx \
+        libfcgi0ldbl \
+        gosu \
+    # Remove temp files
+    && apt-get clean \
+    && apt-get -y autoremove \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
 ADD /root/.scripts /root/.scripts
