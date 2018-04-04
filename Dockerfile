@@ -6,7 +6,7 @@ MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 RUN apt-get -y update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install \
         nginx \
-        libfcgi0ldbl
+        libfcgi0ldbl \
     # Remove temp files
     && apt-get clean \
     && apt-get -y autoremove \
