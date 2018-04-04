@@ -53,14 +53,4 @@ fi
 
 /bin/bash /root/.scripts/fix-permissions.sh || true
 
-if [[ ! -f "$OVERRIDE/permission-fixes.lock" ]]; then
-    /bin/bash /root/.scripts/apply-permissions.sh || true
-
-    touch "$OVERRIDE/permission-fixes.lock"
-
-    echo "Created lock file to avoid apply permissions on every container start"
-else
-    echo "Permissions fixes was done previously. Run the  apply-permissions.sh script after delete the permission-fixes.lock file"
-fi
-
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
