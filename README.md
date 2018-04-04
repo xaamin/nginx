@@ -55,3 +55,8 @@ bash scripts/create-site.sh
 # Windows
 docker exec -it nginx bash /shared/scripts/create-site.sh
 ```
+# Using docker composer
+
+```
+export HOST_USER_ID=$(id -u $(whoami)) && export HOST_GROUP_ID=$(id -u $(whoami)) && docker-compose up -d
+```
