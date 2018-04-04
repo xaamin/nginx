@@ -2,7 +2,7 @@ server {
     client_max_body_size 20M;
     listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/example.test/www;
+    root /shared/web/example.test/www/public;
     index index.php index.html index.htm;
 
     server_name example.test www.example.test;
@@ -17,14 +17,14 @@ server {
 
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/example.test/www;
+    root /shared/web/example.test/www/public;
     index index.php index.html index.htm;
 
     server_name example.test www.example.test;
 
     ssl on;
-    ssl_certificate /shared/example.test/ssl/nginx.crt;
-    ssl_certificate_key /shared/example.test/ssl/nginx.key;
+    ssl_certificate /shared/web/example.test/ssl/nginx.crt;
+    ssl_certificate_key /shared/web/example.test/ssl/nginx.key;
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
