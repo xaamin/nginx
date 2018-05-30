@@ -3,7 +3,13 @@ FROM xaamin/ubuntu:16.04
 MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
 # Install Nginx
-RUN apt-get -y update \
+RUN cd /tmp/ \
+    && wget http://nginx.org/keys/nginx_signing.key \
+    && apt-key add nginx_signing.key \
+    && rm -f nginx_signing.key \
+    && sh -c "echo 'deb http://nginx.org/packages/mainline/ubuntu/ '$(lsb_release -cs)' nginx' > /etc/apt/sources.list.d/nginx-mainline.list" \
+    && sh -c "echo 'deb-src http://nginx.org/packages/mainline/ubuntu/ '$(lsb_release -cs)' nginx' > /etc/apt/sources.list.d/nginx-mainline.list" \
+    && apt-get -y update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install \
         nginx \
         libfcgi0ldbl \
