@@ -2,9 +2,6 @@ server {
     client_max_body_size 20M;
     listen 80 default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /shared/web/example.test/www/public;
-    index index.php index.html index.htm;
-
     server_name example.test www.example.test;
 
     add_header X-Frame-Options "SAMEORIGIN";
@@ -31,7 +28,6 @@ server {
     }
 
     location ~ \.php$ {
-        include fastcgi.conf;
         fastcgi_pass example.test:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
