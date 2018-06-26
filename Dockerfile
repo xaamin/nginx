@@ -24,9 +24,6 @@ ADD /root/.scripts /root/.scripts
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-# Define mountable directories
-VOLUME ["/shared"]
-
 # Define working directory
 WORKDIR /etc/nginx
 

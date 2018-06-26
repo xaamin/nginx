@@ -1,2 +1,3 @@
 .git
 /shared/server/logs
+/databases/storage
