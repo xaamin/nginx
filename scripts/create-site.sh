@@ -25,34 +25,62 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
     fi
 
     if [[ ! -d "$SHARED/web/$ACCOUNT" ]]; then
+        echo "Creating conf path..."
+        mkdir -p "$SHARED/server/conf/$ACCOUNT"
+
+        echo "Creating log path..."
+        mkdir -p "$SHARED/server/log/$ACCOUNT"
+
         echo "Creating account path and site config..."
         mkdir -p "$SHARED/web/$ACCOUNT"
 
-        cp -rf "$SHARED/server/templates/site/." "$SHARED/web/$ACCOUNT/"
+        cp -rf "$SHARED/server/templates/site/conf/" "$SHARED/server/conf/$ACCOUNT/"
 
         cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$ACCOUNT"
 
-        sed -i '' 's|root /shared.*|root '${SHARED}'/shared/web/'$ACCOUNT'/www;|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate /shared.*|ssl_certificate '${SHARED}'/shared/web/'$ACCOUNT'/ssl/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED}'/shared/web/'$ACCOUNT'/ssl/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|root .*|root '${SHARED}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate .*|ssl_certificate '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate_key .*|ssl_certificate_key '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
 
         # Change example.test to right host
         sed -i '' "s|example.test|$ACCOUNT|g" "$SHARED/server/sites/$ACCOUNT"
+
+        echo "Do you want clone some repository into the site document root. (Y/N)? "
+
+        read ANSWER
+
+        if [[ $ANSWER =~ ^[Yy]$ ]]; then
+            echo "Provide the git repository: "
+
+            read REPOSITORY
+
+            git clone $REPOSITORY "$SHARED/web/$ACCOUNT/"
+
+        else
+            cp -rf "$SHARED/server/templates/site/www/" "$SHARED/web/$ACCOUNT/"
+        fi
     fi
 
     # Delete SSL directory if dir exist
-    if [[ -d "$SHARED/web/$ACCOUNT/ssl" ]]; then
+    if [[ -d "$SHARED/server/ssl/$ACCOUNT" ]]; then
         echo "Removing old SSL path..."
-        rm -rf "$SHARED/web/$ACCOUNT/ssl"
+        rm -rf "$SHARED/server/ssl/$ACCOUNT"
     fi
 
     # Create SSL directory and certificate for securing Nginx
-    if [[ ! -d "$SHARED/web/$ACCOUNT/ssl" ]]; then
+    if [[ ! -d "$SHARED/server/ssl/$ACCOUNT" ]]; then
         echo "Creating SSL dir..."
-        mkdir -p "$SHARED/web/$ACCOUNT/ssl"
+        mkdir -p "$SHARED/server/ssl/$ACCOUNT"
 
         echo "Creating $ACCOUNT certificates..."
-        /usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$SHARED/web/$ACCOUNT/ssl/nginx.key" -out "$SHARED/web/$ACCOUNT/ssl/nginx.crt"
+        /usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout "$SHARED/server/ssl/$ACCOUNT/nginx.key" -out "$SHARED/server/ssl/$ACCOUNT/nginx.crt"
+    fi
+
+    # Create log files
+    if [[ ! -d "$SHARED/server/log/$ACCOUNT" ]]; then
+        echo "Creating log dir..."
+        mkdir -p "$SHARED/server/log/$ACCOUNT"
+
     fi
 
     echo ""
