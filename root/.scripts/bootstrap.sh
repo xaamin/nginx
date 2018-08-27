@@ -18,11 +18,11 @@ if [[ -d "$OVERRIDE/sites" ]]; then
     echo "Symlinks created"
 fi
 
-# Create logs directory
-if [[ ! -d "$OVERRIDE/logs" ]]; then
+# Create log directory
+if [[ ! -d "$OVERRIDE/log/nginx" ]]; then
     echo "Creating log dir..."
 
-    mkdir -p "$OVERRIDE/logs"
+    mkdir -p "$OVERRIDE/log/nginx"
 
     echo "Log dir created"
 fi
@@ -34,8 +34,8 @@ if [[ -f "$OVERRIDE/$CONFIG" ]]; then
     rm -f "$CONFIG"
     ln -s "$OVERRIDE/$CONFIG" "$CONFIG"
 
-    sed -i 's|access_log /shared.*|access_log '${OVERRIDE}'/logs/access.log;|' "$OVERRIDE/$CONFIG" || true
-    sed -i 's|error_log /shared.*|error_log '${OVERRIDE}'/logs/error.log;|' "$OVERRIDE/$CONFIG" || true
+    sed -i 's|access_log /shared.*|access_log '${OVERRIDE}'/log/nginx/access.log;|' "$OVERRIDE/$CONFIG" || true
+    sed -i 's|error_log /shared.*|error_log '${OVERRIDE}'/log/nginx/error.log;|' "$OVERRIDE/$CONFIG" || true
 
     echo "Symlink created"
 fi
@@ -44,10 +44,13 @@ fi
 if [[ -f "$OVERRIDE/sites/example.test" ]]; then
     echo "Fixing example.test document root..."
 
-    sed -i 's|root /shared.*|root '${SHARED_VOLUME}'/shared/web/example.test/www;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|root .*|root '${SHARED_VOLUME}'/shared/web/example.test;|' "$OVERRIDE/sites/example.test" || true
 
-    sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/shared/web/example.test/ssl/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
-    sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/shared/web/example.test/ssl/nginx.key;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|access_log .*|access_log '${SHARED_VOLUME}'/shared/server/log/example.test/nginx_access.log;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|error_log .*|error_log '${SHARED_VOLUME}'/shared/server/log/example.test/nginx_error.log;|' "$OVERRIDE/sites/example.test" || true
+
+    sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/shared/server/ssl/example.test/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/shared/server/ssl/example.test/nginx.key;|' "$OVERRIDE/sites/example.test" || true
 
     echo "Fixed"
 fi
