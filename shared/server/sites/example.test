@@ -14,14 +14,14 @@ server {
 
     listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
 
-    root /Users/nulldata/Xaamin/docker/nginx/shared/web/example.test/www;
+    root /shared/web/example.test/www;
     index index.php index.html index.htm;
 
     server_name example.test www.example.test;
 
     ssl on;
-    ssl_certificate /Users/nulldata/Xaamin/docker/nginx/shared/web/example.test/ssl/nginx.crt;
-    ssl_certificate_key /Users/nulldata/Xaamin/docker/nginx/shared/web/example.test/ssl/nginx.key;
+    ssl_certificate /shared/web/example.test/ssl/nginx.crt;
+    ssl_certificate_key /shared/web/example.test/ssl/nginx.key;
 
     location / {
     	try_files $uri $uri/ /index.html /index.php?$query_string;
