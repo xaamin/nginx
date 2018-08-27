@@ -1,0 +1,4 @@
+*
+!nginx/
+!example.test/
+!.gitignore
