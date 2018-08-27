@@ -21,7 +21,7 @@ services:
 
   # Account PHP5-FPM container
   example.test:
-    image: xaamin/php-fpm
+    image: xaamin/php-fpm:7.0
     container_name: example.test
     hostname: example.test
     restart: always
@@ -48,9 +48,10 @@ services:
     # links:
     #   - mysql
     volumes:
+      - ./shared/server/log/example.test:${SHARED_VOLUME}/shared/server/log/example.test
       - ./shared/web/example.test:${SHARED_VOLUME}/shared/web/example.test
-      - ./shared/web/example.test/conf/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
-      - ./shared/web/example.test/conf/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
+      - ./shared/server/conf/example.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
+      - ./shared/server/conf/example.test/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
 
   # NGinx
   nginx:
