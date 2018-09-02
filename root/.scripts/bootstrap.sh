@@ -34,8 +34,8 @@ if [[ -f "$OVERRIDE/$CONFIG" ]]; then
     rm -f "$CONFIG"
     ln -s "$OVERRIDE/$CONFIG" "$CONFIG"
 
-    sed -i 's|access_log /shared.*|access_log '${OVERRIDE}'/log/nginx/access.log;|' "$OVERRIDE/$CONFIG" || true
-    sed -i 's|error_log /shared.*|error_log '${OVERRIDE}'/log/nginx/error.log;|' "$OVERRIDE/$CONFIG" || true
+    sed -i 's|access_log .*|access_log '${OVERRIDE}'/log/nginx/access.log;|' "$OVERRIDE/$CONFIG" || true
+    sed -i 's|error_log .*|error_log '${OVERRIDE}'/log/nginx/error.log;|' "$OVERRIDE/$CONFIG" || true
 
     echo "Symlink created"
 fi
