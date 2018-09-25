@@ -38,12 +38,12 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
 
         cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$ACCOUNT"
 
-        sed -i 's|root .*|root '${SHARED}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i 's|ssl_certificate .*|ssl_certificate '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i 's|ssl_certificate_key .*|ssl_certificate_key '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|root .*|root '${SHARED}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate .*|ssl_certificate '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate_key .*|ssl_certificate_key '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
 
         # Change example.test to right host
-        sed -i "s|example.test|$ACCOUNT|g" "$SHARED/server/sites/$ACCOUNT"
+        sed -i '' "s|example.test|$ACCOUNT|g" "$SHARED/server/sites/$ACCOUNT"
 
         echo "Do you want clone some repository into the site document root. (Y/N)? "
 
