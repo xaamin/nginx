@@ -26,8 +26,11 @@ services:
     hostname: rocket
     restart: always
     environment:
-      # Customize some resource limits. You'll see defaults
-      DATE_TIMEZONE: America/Mexico_City
+      # Server timezone
+      TZ: ${TZ}
+      # PHP timezone
+      DATE_TIMEZONE: ${TZ}
+      # Resource limits.
       REQUEST_TIMEOUT: 60
       MAX_INPUT_TIME: 60
       MEMORY_LIMIT: 128M
@@ -43,6 +46,7 @@ services:
     # links:
     #   - mysql
     volumes:
+      - ./ssh:${SHARED_VOLUME}/.ssh
       - ./shared/server/log/rocket.test:${SHARED_VOLUME}/server/log/rocket.test
       - ./shared/web/rocket.test:${SHARED_VOLUME}/web/rocket.test
       - ./shared/server/conf/rocket.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
@@ -59,6 +63,7 @@ services:
       - "80:80"
       - "443:443"
     environment:
+      TZ: ${TZ}
       # User running in docker
       USER: ${USER}
       # Your User ID, by default in the docker it's 0 for the root user
@@ -71,3 +76,4 @@ services:
       - rocket
     volumes:
       - ./shared:${SHARED_VOLUME}
+      - ./ssh:${SHARED_VOLUME}/.ssh
