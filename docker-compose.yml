@@ -1,29 +1,29 @@
 version: "3"
 
 services:
-  # # Account MySQL container
-  # mysql:
-  #   image: mysql
-  #   container_name: mysql
-  #   hostname: mysql
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: tHezUfru#7E=e2Ud#
-  #     # Uncomment if need create database and custom user on container first run
-  #     #MYSQL_DATABASE: DBNAME
-  #     #MYSQL_USER: USER
-  #     #MYSQL_PASSWORD: PASSWD
-  #   ports:
-  #     - 3306:3306
-  #   volumes:
-  #     - ./databases/storage/mysql:/var/lib/mysql
-  #     - ./databases/config/mysql:/etc/mysql/conf.d
+  # Account MySQL container
+  mysql:
+    image: mysql
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # Uncomment if need create database and custom user on container first run
+      #MYSQL_DATABASE: DBNAME
+      #MYSQL_USER: USER
+      #MYSQL_PASSWORD: PASSWD
+    ports:
+      - 3306:3306
+    volumes:
+      - ./databases/storage/mysql:/var/lib/mysql
+      - ./databases/config/mysql:/etc/mysql/conf.d
 
   # Account PHP5-FPM container
-  example.test:
+  rocket:
     image: xaamin/php-fpm:7.0
-    container_name: example
-    hostname: example
+    container_name: rocket
+    hostname: rocket
     restart: always
     environment:
       # Customize some resource limits. You'll see defaults
@@ -32,6 +32,8 @@ services:
       MAX_INPUT_TIME: 60
       MEMORY_LIMIT: 128M
       POST_MAX_SIZE: 30M
+      # User running in docker
+      USER: ${USER}
       # Your User ID, by default in the docker it's 0 for the root user
       USER_ID: ${USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
@@ -41,10 +43,10 @@ services:
     # links:
     #   - mysql
     volumes:
-      - ./shared/server/log/example.test:${SHARED_VOLUME}/server/log/example.test
-      - ./shared/web/example.test:${SHARED_VOLUME}/web/example.test
-      - ./shared/server/conf/example.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
-      - ./shared/server/conf/example.test/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
+      - ./shared/server/log/rocket.test:${SHARED_VOLUME}/server/log/rocket.test
+      - ./shared/web/rocket.test:${SHARED_VOLUME}/web/rocket.test
+      - ./shared/server/conf/rocket.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
+      - ./shared/server/conf/rocket.test/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
 
   # NGinx
   nginx:
@@ -53,9 +55,12 @@ services:
     hostname: nginx
     restart: always
     ports:
-      - 80:80
-      - 443:443
+      - "2222:22"
+      - "80:80"
+      - "443:443"
     environment:
+      # User running in docker
+      USER: ${USER}
       # Your User ID, by default in the docker it's 0 for the root user
       USER_ID: ${USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
@@ -63,6 +68,6 @@ services:
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     links:
-      - example
+      - rocket
     volumes:
       - ./shared:${SHARED_VOLUME}
