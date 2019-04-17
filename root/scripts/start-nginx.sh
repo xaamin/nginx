@@ -3,6 +3,9 @@
 # Create the user
 /bin/bash /root/scripts/create-user.sh
 
+USER=${USER:-xaamin}
+SERVER_PATH="/home/$USER"
+
 # Configure and run nginx
 NGINX="/etc/nginx"
 OVERRIDE="${SHARED_VOLUME}/server"
@@ -51,13 +54,7 @@ if [ ! -f "$LOCK_FILE" ]; then
     if [[ -f "$OVERRIDE/sites/rocket.test" ]]; then
         echo "Fixing rocket.test document root..."
 
-        sed -i 's|root .*|root '${SHARED_VOLUME}'/web/rocket.test;|' "$OVERRIDE/sites/rocket.test" || true
-
-        sed -i 's|access_log .*|access_log '${SHARED_VOLUME}'/server/log/rocket.test/nginx_access.log;|' "$OVERRIDE/sites/rocket.test" || true
-        sed -i 's|error_log .*|error_log '${SHARED_VOLUME}'/server/log/rocket.test/nginx_error.log;|' "$OVERRIDE/sites/rocket.test" || true
-
-        sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/server/ssl/rocket.test/nginx.crt;|' "$OVERRIDE/sites/rocket.test" || true
-        sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/server/ssl/rocket.test/nginx.key;|' "$OVERRIDE/sites/rocket.test" || true
+        sed -i "s|/shared|$SERVER_PATH|g" "$OVERRIDE/sites/rocket.test"
 
         echo "" > $LOCK_FILE
 
