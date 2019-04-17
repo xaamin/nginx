@@ -33,6 +33,10 @@ if [ ! -f $SSH_KEY_FILE ]; then
     ssh-keygen -t rsa -b 4096 -C "$USER" -f $SSH_KEY_FILE
 fi
 
+rm -rf "$SHARED_VOLUME/.ssh"
+rm -rf "$SHARED_VOLUME/ssh"
+rm -rf "$SHARED_VOLUME/.bashrc"
+
 echo ""
 echo "========================================="
 echo "Using shared volume: '$SHARED_VOLUME'"
