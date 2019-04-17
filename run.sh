@@ -25,9 +25,18 @@ export USER_ID=$(id -u $(whoami))
 
 export USER_GID=$(id -g $(whoami))
 
+export TZ=America/Mexico_City
+
+SSH_KEY_FILE=$(pwd)/ssh/id_rsa
+
+if [ ! -f $SSH_KEY_FILE ]; then
+    ssh-keygen -t rsa -b 4096 -C "$USER" -f $SSH_KEY_FILE
+fi
+
 echo ""
 echo "========================================="
 echo "Using shared volume: '$SHARED_VOLUME'"
+echo "Using timezone: '$TZ'"
 echo "MySQL password: '$MYSQL_ROOT_PASSWORD'"
 echo "SSH password: '$SSH_PASSWORD'"
 echo "Creating as user $USER with UID $USER_ID and GUID $USER_GID"
