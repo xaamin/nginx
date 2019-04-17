@@ -46,7 +46,7 @@ services:
     # links:
     #   - mysql
     volumes:
-      - ./ssh:${SHARED_VOLUME}/.ssh
+      - ./ssh:${SHARED_VOLUME}/ssh
       - ./shared/server/log/rocket.test:${SHARED_VOLUME}/server/log/rocket.test
       - ./shared/web/rocket.test:${SHARED_VOLUME}/web/rocket.test
       - ./shared/server/conf/rocket.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
@@ -75,5 +75,5 @@ services:
     links:
       - rocket
     volumes:
+      - ./ssh:${SHARED_VOLUME}/ssh
       - ./shared:${SHARED_VOLUME}
-      - ./ssh:${SHARED_VOLUME}/.ssh
