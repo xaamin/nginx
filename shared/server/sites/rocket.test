@@ -16,17 +16,17 @@ server {
 
     add_header X-Frame-Options "SAMEORIGIN";
 
-    root /home/xaamin/web/rocket.test;
+    root /shared/web/rocket.test;
     index index.php index.html index.htm;
 
     server_name rocket.test www.rocket.test;
 
     ssl on;
-    ssl_certificate /home/xaamin/server/ssl/rocket.test/nginx.crt;
-    ssl_certificate_key /home/xaamin/server/ssl/rocket.test/nginx.key;
+    ssl_certificate /shared/server/ssl/rocket.test/nginx.crt;
+    ssl_certificate_key /shared/server/ssl/rocket.test/nginx.key;
 
-    access_log /home/xaamin/server/log/rocket.test/nginx_access.log;
-    error_log /home/xaamin/server/log/rocket.test/nginx_error.log;
+    access_log /shared/server/log/rocket.test/nginx_access.log;
+    error_log /shared/server/log/rocket.test/nginx_error.log;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
