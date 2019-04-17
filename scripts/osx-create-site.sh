@@ -1,6 +1,8 @@
 #!/bin/bash
 
 SHARED="$(pwd)/shared"
+USER=${DOCKER_USER:-'xaamin'}
+SERVER_PATH="/home/$DOCKER_USER"
 
 echo "This removes previous certificates if exists. Do you want to continue. (Y/N)? "
 
@@ -38,9 +40,9 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
 
         cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$ACCOUNT"
 
-        sed -i '' 's|root .*|root '${SHARED}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate .*|ssl_certificate '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate_key .*|ssl_certificate_key '${SHARED}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|root .*|root '${SERVER_PATH}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate .*|ssl_certificate '${SERVER_PATH}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
+        sed -i '' 's|ssl_certificate_key .*|ssl_certificate_key '${SERVER_PATH}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
 
         # Change example.test to right host
         sed -i '' "s|example.test|$ACCOUNT|g" "$SHARED/server/sites/$ACCOUNT"

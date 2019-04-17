@@ -1,4 +1,4 @@
-FROM xaamin/ubuntu:16.04
+FROM xaamin/ubuntu:18.04
 
 MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
@@ -19,7 +19,7 @@ RUN cd /tmp/ \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
-ADD /root/.scripts /root/.scripts
+ADD /root/scripts /root/scripts
 
 # Add supervisor config file
 ADD supervisord.conf /etc/supervisor/supervisord.conf
@@ -31,4 +31,4 @@ WORKDIR /etc/nginx
 EXPOSE 80 443
 
 # Define default command.
-CMD ["/bin/bash", "/root/.scripts/bootstrap.sh"]
+CMD ["/bin/bash", "/root/scripts/bootstrap.sh"]
