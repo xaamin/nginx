@@ -22,27 +22,34 @@ services:
   # Account PHP5-FPM container
   example.test:
     image: xaamin/php-fpm:7.0
-    container_name: example
-    hostname: example
+    container_name: example.test
+    hostname: example.test
     restart: always
     environment:
+      # Domain to serve as upstream
+      ACCOUNT: example.test
+      COMPOSER_HOME: "/home/www-data"
       # Customize some resource limits. You'll see defaults
       DATE_TIMEZONE: America/Mexico_City
       REQUEST_TIMEOUT: 60
       MAX_INPUT_TIME: 60
       MEMORY_LIMIT: 128M
       POST_MAX_SIZE: 30M
+      # The User inside the docker
+      DOCKER_USER: www-data
+      # The group inside the docker
+      DOCKER_GROUP: www-data
       # Your User ID, by default in the docker it's 0 for the root user
-      USER_ID: ${USER_ID}
+      HOST_USER_ID: ${HOST_USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
-      USER_GID: ${USER_GID}
+      HOST_GROUP_ID: ${HOST_GROUP_ID}
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     # links:
     #   - mysql
     volumes:
-      - ./shared/server/log/example.test:${SHARED_VOLUME}/server/log/example.test
-      - ./shared/web/example.test:${SHARED_VOLUME}/web/example.test
+      - ./shared/server/log/example.test:${SHARED_VOLUME}/shared/server/log/example.test
+      - ./shared/web/example.test:${SHARED_VOLUME}/shared/web/example.test
       - ./shared/server/conf/example.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
       - ./shared/server/conf/example.test/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
 
@@ -56,13 +63,17 @@ services:
       - 80:80
       - 443:443
     environment:
+      # The User inside the docker
+      DOCKER_USER: www-data
+      # The group inside the docker
+      DOCKER_GROUP: www-data
       # Your User ID, by default in the docker it's 0 for the root user
-      USER_ID: ${USER_ID}
+      HOST_USER_ID: ${HOST_USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
-      USER_GID: ${USER_GID}
+      HOST_GROUP_ID: ${HOST_GROUP_ID}
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     links:
-      - example
+      - example.test
     volumes:
-      - ./shared:${SHARED_VOLUME}
+      - ./:${SHARED_VOLUME}

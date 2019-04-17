@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SHARED="$(pwd)/shared"
-USER=${DOCKER_USER:-'xaamin'}
+DOCKER_USER=${DOCKER_USER:-'xaamin'}
 SERVER_PATH="/home/$DOCKER_USER"
 
 echo "This removes previous certificates if exists. Do you want to continue. (Y/N)? "

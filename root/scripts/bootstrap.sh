@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NGINX="/etc/nginx"
-OVERRIDE="${SHARED_VOLUME}/shared/server"
+OVERRIDE="${SHARED_VOLUME}/server"
 
 CONFIG="nginx.conf"
 
@@ -44,13 +44,13 @@ fi
 if [[ -f "$OVERRIDE/sites/example.test" ]]; then
     echo "Fixing example.test document root..."
 
-    sed -i 's|root .*|root '${SHARED_VOLUME}'/shared/web/example.test;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|root .*|root '${SHARED_VOLUME}'/web/example.test;|' "$OVERRIDE/sites/example.test" || true
 
-    sed -i 's|access_log .*|access_log '${SHARED_VOLUME}'/shared/server/log/example.test/nginx_access.log;|' "$OVERRIDE/sites/example.test" || true
-    sed -i 's|error_log .*|error_log '${SHARED_VOLUME}'/shared/server/log/example.test/nginx_error.log;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|access_log .*|access_log '${SHARED_VOLUME}'/server/log/example.test/nginx_access.log;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|error_log .*|error_log '${SHARED_VOLUME}'/server/log/example.test/nginx_error.log;|' "$OVERRIDE/sites/example.test" || true
 
-    sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/shared/server/ssl/example.test/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
-    sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/shared/server/ssl/example.test/nginx.key;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/server/ssl/example.test/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
+    sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/server/ssl/example.test/nginx.key;|' "$OVERRIDE/sites/example.test" || true
 
     echo "Fixed"
 fi
