@@ -31,4 +31,4 @@ WORKDIR /etc/nginx
 EXPOSE 80 443
 
 # Define default command.
-CMD ["/bin/bash", "/root/scripts/bootstrap.sh"]
+CMD ["/bin/bash", "/root/scripts/start-nginx.sh"]
