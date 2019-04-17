@@ -1,0 +1,46 @@
+server {
+    client_max_body_size 20M;
+    listen 80; # Default "Catch All" Server Block, only use on one block (default_server)
+
+    server_name rocket.test www.rocket.test;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    client_max_body_size 20M;
+
+    listen 443 ssl; # Default "Catch All" Server Block, only use on one block (default_server)
+
+    add_header X-Frame-Options "SAMEORIGIN";
+
+    root /home/xaamin/web/rocket.test;
+    index index.php index.html index.htm;
+
+    server_name rocket.test www.rocket.test;
+
+    ssl on;
+    ssl_certificate /home/xaamin/server/ssl/rocket.test/nginx.crt;
+    ssl_certificate_key /home/xaamin/server/ssl/rocket.test/nginx.key;
+
+    access_log /home/xaamin/server/log/rocket.test/nginx_access.log;
+    error_log /home/xaamin/server/log/rocket.test/nginx_error.log;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ /\.ht {
+    	deny all;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass rocket:9000;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
