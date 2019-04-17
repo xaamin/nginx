@@ -56,7 +56,7 @@ if [ ! -f "$LOCK_FILE" ]; then
 
         sed -i "s|/shared|$SERVER_PATH|g" "$OVERRIDE/sites/rocket.test"
 
-        echo "" > $LOCK_FILE
+        touch $LOCK_FILE
 
         echo "Fixed"
     fi
