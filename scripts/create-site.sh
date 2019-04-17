@@ -36,16 +36,7 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
         echo "Creating account path and site config..."
         mkdir -p "$SHARED/web/$ACCOUNT"
 
-        cp -rf "$SHARED/server/templates/site/conf/" "$SHARED/server/conf/$ACCOUNT/"
-
-        cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$ACCOUNT"
-
-        sed -i '' 's|root .*|root '${SERVER_PATH}'/web/'$ACCOUNT';|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate .*|ssl_certificate '${SERVER_PATH}'/server/ssl/'$ACCOUNT'/nginx.crt;|' "$SHARED/server/sites/$ACCOUNT" || true
-        sed -i '' 's|ssl_certificate_key .*|ssl_certificate_key '${SERVER_PATH}'/server/ssl/'$ACCOUNT'/nginx.key;|' "$SHARED/server/sites/$ACCOUNT" || true
-
-        # Change example.test to right host
-        sed -i "s|example.test|$ACCOUNT|g" "$SERVER_PATH/server/sites/$ACCOUNT"
+        # Clonse a git repository
 
         echo "Do you want clone some repository into the site document root. (Y/N)? "
 
@@ -62,6 +53,28 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
             cp -rf "$SHARED/server/templates/site/www/" "$SHARED/web/$ACCOUNT/"
         fi
     fi
+
+    cp -rf "$SHARED/server/templates/site/conf/" "$SHARED/server/conf/$ACCOUNT/"
+
+    cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$ACCOUNT"
+
+    # Change rocket.test to right host
+    sed -i "s|rocket.test|$ACCOUNT|g" "$SHARED/server/sites/$ACCOUNT"
+
+    sed -i "s|/shared|$SERVER_PATH|g" "$SHARED/server/sites/$ACCOUNT"
+
+    # Configure Upstream
+    echo "Please provide a PHP-FPM linked container. Default $ACCOUNT "
+
+    read UPSTREAM
+
+    if [[ -z $UPSTREAM ]]; then
+        UPSTREAM=$ACCOUNT
+    fi
+
+    echo "Using $UPSTREAM as upstram"
+
+    sed -i "s|fastcgi_pass.*|fastcgi_pass $UPSTREAM:9000;|" "$SHARED/server/sites/$ACCOUNT"
 
     # Delete SSL directory if dir exist
     if [[ -d "$SHARED/server/ssl/$ACCOUNT" ]]; then
