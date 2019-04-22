@@ -4,7 +4,7 @@
 /bin/bash /root/scripts/create-user.sh
 
 USER=${USER:-xaamin}
-SERVER_PATH="/home/$USER"
+SERVER_PATH=${SHARED_VOLUME:-"/home/$USER"}
 
 # Configure and run nginx
 NGINX="/etc/nginx"
