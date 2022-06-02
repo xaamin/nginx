@@ -40,7 +40,7 @@ fi
 
 # Update the example document root.
 if [[ -f "$OVERRIDE/sites/example.test" ]]; then
-    LOGS="${SHARED_VOLUME}/server/log/${ACCOUNT:=$(hostname)}"
+    LOGS="${SHARED_VOLUME}/server/log/example"
 
     if [[ ! -f "${LOGS}/example-site-fix.lock" ]]; then
         echo "Fixing example.test document root..."
