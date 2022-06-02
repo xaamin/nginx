@@ -3,6 +3,7 @@
 SHARED="$(pwd)/shared"
 DOCKER_USER=${DOCKER_USER:-'rocket'}
 SERVER_PATH="$SHARED"
+LARAVEL_PROJECT=${LARAVEL_PROJECT:-'Y'}
 
 echo "This removes previous certificates if exists. Do you want to continue. (Y/N)? "
 
@@ -30,30 +31,36 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
 
     read DOMAIN_NAME
 
+    echo "Creating conf path..."
+    mkdir -p "$SHARED/server/conf/$PROJECT"
+
+    echo "Creating log path..."
+    mkdir -p "$SHARED/server/log/$PROJECT"
+
+    echo "Creating PROJECT path and site config..."
+    mkdir -p "$SHARED/web/$PROJECT"
+
+    cp -rf "$SHARED/server/templates/site/conf/." "$SHARED/server/conf/$PROJECT/"
+
+    cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$DOMAIN_NAME"
+
+    PUBLIC_PATH=''
+
+    if [[ $ANSWER =~ ^[Yy]$ ]]; then
+        PUBLIC_PATH='/public'
+    fi
+
+    sed -i 's|root .*|root '${SERVER_PATH}'/web/'${PROJECT}${PUBLIC_PATH}';|' "$SHARED/server/sites/$DOMAIN_NAME" || true
+    sed -i 's|ssl_certificate .*|ssl_certificate '${SERVER_PATH}'/server/ssl/'$PROJECT'/nginx.crt;|' "$SHARED/server/sites/$DOMAIN_NAME" || true
+    sed -i 's|ssl_certificate_key .*|ssl_certificate_key '${SERVER_PATH}'/server/ssl/'$PROJECT'/nginx.key;|' "$SHARED/server/sites/$DOMAIN_NAME" || true
+
+    # Change example.test to right host
+    sed -i "s|example.test|$DOMAIN_NAME|g" "$SHARED/server/sites/$DOMAIN_NAME"
+
+    # Update upstream
+    sed -i "s|fastcgi_pass .*|fastcgi_pass $PROJECT:9000;|g" "$SHARED/server/sites/$DOMAIN_NAME"
+
     if [[ ! -d "$SHARED/web/$PROJECT" ]]; then
-        echo "Creating conf path..."
-        mkdir -p "$SHARED/server/conf/$PROJECT"
-
-        echo "Creating log path..."
-        mkdir -p "$SHARED/server/log/$PROJECT"
-
-        echo "Creating PROJECT path and site config..."
-        mkdir -p "$SHARED/web/$PROJECT"
-
-        cp -rf "$SHARED/server/templates/site/conf/." "$SHARED/server/conf/$PROJECT/"
-
-        cp -f "$SHARED/server/templates/site.conf" "$SHARED/server/sites/$DOMAIN_NAME"
-
-        sed -i 's|root .*|root '${SERVER_PATH}'/web/'$PROJECT';|' "$SHARED/server/sites/$DOMAIN_NAME" || true
-        sed -i 's|ssl_certificate .*|ssl_certificate '${SERVER_PATH}'/server/ssl/'$PROJECT'/nginx.crt;|' "$SHARED/server/sites/$DOMAIN_NAME" || true
-        sed -i 's|ssl_certificate_key .*|ssl_certificate_key '${SERVER_PATH}'/server/ssl/'$PROJECT'/nginx.key;|' "$SHARED/server/sites/$DOMAIN_NAME" || true
-
-        # Change example.test to right host
-        sed -i "s|example.test|$DOMAIN_NAME|g" "$SHARED/server/sites/$DOMAIN_NAME"
-
-        # Update upstream
-        sed -i "s|fastcgi_pass .*|fastcgi_pass $PROJECT:9000;|g" "$SHARED/server/sites/$DOMAIN_NAME"
-
         echo "Do you want clone some repository into the site document root. (Y/N)? "
 
         read ANSWER
@@ -68,6 +75,8 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
         else
             cp -rf "$SHARED/server/templates/site/www/." "$SHARED/web/$PROJECT/"
         fi
+    else
+        echo "Path $PROJECT exists, skipping."
     fi
 
     # Delete SSL directory if dir exist
