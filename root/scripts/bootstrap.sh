@@ -55,6 +55,10 @@ if [[ -f "$OVERRIDE/sites/example.test" ]]; then
 
         echo "Fixed"
 
+        echo "Creating example.test certificates..."
+
+        /usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=MX/ST=Oaxaca/L=México/O=Global Fintech/OU=IT Department/CN=example.test" -keyout "$SHARED/server/ssl/example.test/nginx.key" -out "$SHARED/server/ssl/example.test/nginx.crt"
+
         touch "${LOGS}/example-site-fix.lock"
 
         echo "Created lock file to avoid apply fixes to example site on every container start"
