@@ -9,11 +9,9 @@ CONFIG="nginx.conf"
 if [[ -d "$OVERRIDE/sites" ]]; then
     echo "Creating symlinks to available sites..."
 
-    rm -fr "sites-available"
-    ln -s "$OVERRIDE/sites" "sites-available"
+    rm -rf "conf.d"
 
-    rm -fr "sites-enabled"
-    ln -s "$OVERRIDE/sites" "sites-enabled"
+    ln -s "$OVERRIDE/sites" "conf.d"
 
     echo "Symlinks created"
 fi
@@ -34,27 +32,39 @@ if [[ -f "$OVERRIDE/$CONFIG" ]]; then
     rm -f "$CONFIG"
     ln -s "$OVERRIDE/$CONFIG" "$CONFIG"
 
-    sed -i 's|access_log .*|access_log '${OVERRIDE}'/log/nginx/access.log;|' "$OVERRIDE/$CONFIG" || true
-    sed -i 's|error_log .*|error_log '${OVERRIDE}'/log/nginx/error.log;|' "$OVERRIDE/$CONFIG" || true
+    sed -i "s|access_log /.*|access_log ${OVERRIDE}/log/nginx/access.log;|" "$OVERRIDE/$CONFIG" || true
+    sed -i "s|error_log /.*|error_log ${OVERRIDE}/log/nginx/error.log;|" "$OVERRIDE/$CONFIG" || true
 
     echo "Symlink created"
 fi
 
 # Update the example document root.
 if [[ -f "$OVERRIDE/sites/example.test" ]]; then
-    echo "Fixing example.test document root..."
+    LOGS="${SHARED_VOLUME}/server/log/${ACCOUNT:=$(hostname)}"
 
-    sed -i 's|root .*|root '${SHARED_VOLUME}'/web/example.test;|' "$OVERRIDE/sites/example.test" || true
+    if [[ ! -f "${LOGS}/example-site-fix.lock" ]]; then
+        echo "Fixing example.test document root..."
 
-    sed -i 's|access_log .*|access_log '${SHARED_VOLUME}'/server/log/example.test/nginx_access.log;|' "$OVERRIDE/sites/example.test" || true
-    sed -i 's|error_log .*|error_log '${SHARED_VOLUME}'/server/log/example.test/nginx_error.log;|' "$OVERRIDE/sites/example.test" || true
+        sed -i 's|root .*|root '${SHARED_VOLUME}'/web/example.test;|' "$OVERRIDE/sites/example.test" || true
 
-    sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/server/ssl/example.test/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
-    sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/server/ssl/example.test/nginx.key;|' "$OVERRIDE/sites/example.test" || true
+        sed -i 's|access_log /.*|access_log '${SHARED_VOLUME}'/server/log/example.test/nginx_access.log;|' "$OVERRIDE/sites/example.test" || true
+        sed -i 's|error_log /.*|error_log '${SHARED_VOLUME}'/server/log/example.test/nginx_error.log;|' "$OVERRIDE/sites/example.test" || true
 
-    echo "Fixed"
+        sed -i 's|ssl_certificate /shared.*|ssl_certificate '${SHARED_VOLUME}'/server/ssl/example.test/nginx.crt;|' "$OVERRIDE/sites/example.test" || true
+        sed -i 's|ssl_certificate_key /shared.*|ssl_certificate_key '${SHARED_VOLUME}'/server/ssl/example.test/nginx.key;|' "$OVERRIDE/sites/example.test" || true
+
+        echo "Fixed"
+
+        touch "${LOGS}/example-site-fix.lock"
+
+        echo "Created lock file to avoid apply fixes to example site on every container start"
+    else
+        echo "Example site fix done previously."
+        echo ""
+    fi
+
 fi
 
-/bin/bash /root/.scripts/fix-permissions.sh || true
+/bin/bash /root/scripts/fix-permissions.sh || true
 
 /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
