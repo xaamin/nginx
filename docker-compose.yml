@@ -20,7 +20,7 @@ services:
   #     - ./databases/config/mysql:/etc/mysql/conf.d
 
   # Account PHP5-FPM container
-  example.test:
+  example:
     image: xaamin/php-fpm:7.0
     container_name: example
     hostname: example
@@ -33,9 +33,9 @@ services:
       MEMORY_LIMIT: 128M
       POST_MAX_SIZE: 30M
       # Your User ID, by default in the docker it's 0 for the root user
-      USER_ID: ${USER_ID}
+      HOST_USER_ID: ${HOST_USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
-      USER_GID: ${USER_GID}
+      HOST_GROUP_ID: ${HOST_GROUP_ID}
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     # links:
@@ -57,9 +57,9 @@ services:
       - 443:443
     environment:
       # Your User ID, by default in the docker it's 0 for the root user
-      USER_ID: ${USER_ID}
+      HOST_USER_ID: ${HOST_USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
-      USER_GID: ${USER_GID}
+      HOST_GROUP_ID: ${HOST_GROUP_ID}
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     links:
