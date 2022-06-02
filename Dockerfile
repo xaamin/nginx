@@ -1,4 +1,4 @@
-FROM xaamin/ubuntu:18.04
+FROM xaamin/ubuntu:20.04
 
 MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
 
@@ -9,13 +9,13 @@ RUN cd /tmp/ \
     && rm -f nginx_signing.key \
     && sh -c "echo 'deb http://nginx.org/packages/ubuntu/ '$(lsb_release -cs)' nginx' > /etc/apt/sources.list.d/nginx.list" \
     && sh -c "echo 'deb-src http://nginx.org/packages/ubuntu/ '$(lsb_release -cs)' nginx' >> /etc/apt/sources.list.d/nginx.list" \
-    && apt-get -y update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install \
+    && apt -y update \
+    && DEBIAN_FRONTEND=noninteractive apt -y install \
         nginx \
         libfcgi0ldbl \
     # Remove temp files
-    && apt-get clean \
-    && apt-get -y autoremove \
+    && apt clean \
+    && apt -y autoremove \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bootstrap file
