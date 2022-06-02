@@ -1,6 +1,6 @@
 FROM xaamin/ubuntu:20.04
 
-MAINTAINER "Benjamín Martínez Mateos" <xaamin@outlook.com>
+LABEL maintainer="Benjamín Martínez Mateos xaamin@outlook.com"
 
 # Install Nginx
 RUN cd /tmp/ \
