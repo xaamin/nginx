@@ -1,11 +1,8 @@
 server {
     client_max_body_size 20M;
-    listen 80 default_server; # Default "Catch All" Server Block, only use on one block
+    listen 80; # Default "Catch All" Server Block, only use on one block (default_server)
 
-    server_name example.test www.example.test;
-
-    access_log /shared/server/log/example.test/nginx_access.log;
-    error_log /shared/server/log/example.test/nginx_error.log;
+    server_name example.test;
 
     add_header X-Frame-Options "SAMEORIGIN";
 
@@ -15,33 +12,30 @@ server {
 server {
     client_max_body_size 20M;
 
-    listen 443 ssl default_server; # Default "Catch All" Server Block, only use on one block
+    listen 443;
 
     root /shared/web/example.test;
     index index.php index.html index.htm;
 
-    server_name example.test www.example.test;
+    server_name example.test;
 
     ssl on;
-    ssl_certificate /shared/server/ssl/example.test/nginx.crt;
-    ssl_certificate_key /shared/server/ssl/example.test/nginx.key;
-
-    access_log /shared/server/log/example.test/nginx_access.log;
-    error_log /shared/server/log/example.test/nginx_error.log;
+    ssl_certificate /shared/web/example.test/ssl/nginx.crt;
+    ssl_certificate_key /shared/web/example.test/ssl/nginx.key;
 
     location / {
-    	try_files $uri $uri/ /index.html /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass example.test:9000;
-        fastcgi_index index.php;
-        fastcgi_split_path_info ^(.+\.php)(.*)$;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        try_files $uri $uri/ /index.php?$query_string;
     }
 
     location ~ /\.ht {
     	deny all;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass example:9000;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 }
