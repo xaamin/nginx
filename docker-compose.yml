@@ -1,44 +1,43 @@
 version: "3"
 
 services:
-  # # Account MySQL container
-  # mysql:
-  #   image: mysql
-  #   container_name: mysql
-  #   hostname: mysql
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: tHezUfru#7E=e2Ud#
+  # Account MySQL container
+  mysql:
+    image: mysql
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
   #     # Uncomment if need create database and custom user on container first run
   #     #MYSQL_DATABASE: DBNAME
   #     #MYSQL_USER: USER
   #     #MYSQL_PASSWORD: PASSWD
-  #   ports:
-  #     - 3306:3306
-  #   volumes:
-  #     - ./databases/storage/mysql:/var/lib/mysql
-  #     - ./databases/config/mysql:/etc/mysql/conf.d
+    ports:
+      - 3306:3306
+    volumes:
+      - ./databases/storage/mysql:/var/lib/mysql
+      - ./databases/config/mysql:/etc/mysql/conf.d
 
   # Account PHP5-FPM container
-  example.test:
-    image: xaamin/php-fpm:7.0
-    container_name: example.test
-    hostname: example.test
+  example:
+    image: xaamin/php-fpm:7.4
+    container_name: example
+    hostname: example
     restart: always
     environment:
-      # Domain to serve as upstream
-      ACCOUNT: example.test
-      COMPOSER_HOME: "/home/www-data"
       # Customize some resource limits. You'll see defaults
       DATE_TIMEZONE: America/Mexico_City
       REQUEST_TIMEOUT: 60
       MAX_INPUT_TIME: 60
       MEMORY_LIMIT: 128M
       POST_MAX_SIZE: 30M
+
       # The User inside the docker
       DOCKER_USER: www-data
       # The group inside the docker
       DOCKER_GROUP: www-data
+
       # Your User ID, by default in the docker it's 0 for the root user
       HOST_USER_ID: ${HOST_USER_ID}
       # Your Group ID, by default in the docker it's 0 for the root user
@@ -48,12 +47,12 @@ services:
     # links:
     #   - mysql
     volumes:
-      - ./shared/server/log/example.test:${SHARED_VOLUME}/shared/server/log/example.test
-      - ./shared/web/example.test:${SHARED_VOLUME}/shared/web/example.test
-      - ./shared/server/conf/example.test/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
-      - ./shared/server/conf/example.test/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
+      - ./shared/server/log/example:${SHARED_VOLUME}/server/log/example
+      - ./shared/web/example:${SHARED_VOLUME}/web/example
+      - ./shared/server/conf/example/php.ini:/etc/php/7.0/fpm/conf.d/10-custom_php.ini
+      - ./shared/server/conf/example/php_cli.ini:/etc/php/7.0/cli/conf.d/10-custom_php.ini
 
-  # NGinx
+  # Nginx
   nginx:
     image: xaamin/nginx
     container_name: nginx
@@ -74,6 +73,6 @@ services:
       # Shared volume moun point
       SHARED_VOLUME: ${SHARED_VOLUME}
     links:
-      - example.test
+      - example
     volumes:
-      - ./:${SHARED_VOLUME}
+      - ./shared:${SHARED_VOLUME}
