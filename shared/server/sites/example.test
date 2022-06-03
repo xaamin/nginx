@@ -31,7 +31,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass example.test:9000;
+        fastcgi_pass example:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
