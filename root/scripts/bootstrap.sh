@@ -59,7 +59,7 @@ if [[ -f "$OVERRIDE/sites/example.test" ]]; then
 
         echo "Creating example.test certificates..."
 
-        mkdir $SHARED_VOLUME/server/ssl/example
+        mkdir $SHARED_VOLUME/server/ssl/example 2>/dev/null
 
         /usr/bin/openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=MX/ST=Oaxaca/L=México/O=Global Fintech/OU=IT Department/CN=example.test" -keyout "$SHARED_VOLUME/server/ssl/example/nginx.key" -out "$SHARED_VOLUME/server/ssl/example/nginx.crt"
 
