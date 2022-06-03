@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  # # Account MySQL container
+  # Account MySQL container
   mysql:
     image: mysql
     container_name: mysql
     hostname: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: tHezUfru#7E=e2Ud#
+      MYSQL_ROOT_PASSWORD:
   #     # Uncomment if need create database and custom user on container first run
   #     #MYSQL_DATABASE: DBNAME
   #     #MYSQL_USER: USER

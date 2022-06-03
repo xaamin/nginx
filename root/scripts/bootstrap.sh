@@ -42,6 +42,8 @@ fi
 if [[ -f "$OVERRIDE/sites/example.test" ]]; then
     LOGS="${SHARED_VOLUME}/server/log/example"
 
+    mkdir -p $LOGS
+
     if [[ ! -f "${LOGS}/example-site-fix.lock" ]]; then
         echo "Fixing example.test document root..."
 

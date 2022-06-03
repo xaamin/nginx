@@ -46,7 +46,7 @@ if [[ $ANSWER =~ ^[Yy]$ ]]; then
 
     PUBLIC_PATH=''
 
-    if [[ $ANSWER =~ ^[Yy]$ ]]; then
+    if [[ $LARAVEL_PROJECT =~ ^[Yy]$ ]]; then
         PUBLIC_PATH='/public'
     fi
 

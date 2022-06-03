@@ -14,13 +14,13 @@ server {
 
     listen 443 ssl;
 
-    root /shared/web/example.test;
+    root /Users/xaamin/docker/nginx/shared/web/example;
     index index.php index.html index.htm;
 
     server_name example.test;
 
-    ssl_certificate /shared/web/example.test/ssl/nginx.crt;
-    ssl_certificate_key /shared/web/example.test/ssl/nginx.key;
+    ssl_certificate /Users/xaamin/docker/nginx/shared/server/ssl/example/nginx.crt;
+    ssl_certificate_key /Users/xaamin/docker/nginx/shared/server/ssl/example/nginx.key;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
@@ -31,7 +31,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass rocket.test:9000;
+        fastcgi_pass example:9000;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(.*)$;
         include fastcgi_params;
