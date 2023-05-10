@@ -1,4 +1,4 @@
-FROM xaamin/ubuntu:20.04
+FROM xaamin/ubuntu:22.04
 
 LABEL maintainer="Benjamín Martínez Mateos xaamin@outlook.com"
 
